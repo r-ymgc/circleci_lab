@@ -1,5 +1,5 @@
-deploy_dev:
-  deploy.sh dev
+terraform_dev:
+  terraform.sh dev
 
-deploy_fut:
-  deploy.sh fut
+codedeploy_dev:
+  codedeploy.sh dev
