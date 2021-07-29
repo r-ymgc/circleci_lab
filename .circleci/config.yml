@@ -6,6 +6,4 @@ jobs:
     steps:
       - checkout
       - run: echo "Terraform実行"
-      - run:
-        name: Terraform plan実行
-        command: make terraform_plan
+      - run: make terraform_plan
