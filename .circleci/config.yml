@@ -7,46 +7,72 @@ executors:
     docker:
       - image: circleci/node:8.11.4
 
-# 共通step定義
-commands:
-  terraform_init:
-    steps:
-      - checkout
-      - run:
-          name: "Terraform init dev"
-          command: bash -ex ./scripts/terraform.sh init dev
+# # 共通step定義
+# commands:
+#   terraform_init:
+#     steps:
+#       - checkout
+#       - run:
+#           name: "Terraform init dev"
+#           command: bash -ex ./scripts/terraform.sh init dev
 
 # job定義
 jobs:
   terraform_plan:
+    parameters:
+      env:
+        type: enum
+        enum: ["dev", "fut"]
     executor:
       name: default
     steps:
-      - terraform_init
+      - checkout
       - run:
-          name: "Terraform plan dev"
-          command: bash -ex ./scripts/terraform.sh plan dev
+          name: "Terraform init << parameters.env >>"
+          command: bash -ex ./scripts/terraform.sh init << parameters.env >>
+      - run:
+          name: "Terraform plan << parameters.env >>"
+          command: bash -ex ./scripts/terraform.sh plan << parameters.env >>
   terraform_apply:
     executor:
       name: default
     steps:
-      - terraform_init
+      - checkout
       - run:
-          name: "Terraform apply dev"
-          command: bash -ex ./scripts/terraform.sh apply dev
+          name: "Terraform init << parameters.env >>"
+          command: bash -ex ./scripts/terraform.sh init << parameters.env >>
+      - run:
+          name: "Terraform apply << parameters.env >>"
+          command: bash -ex ./scripts/terraform.sh apply << parameters.env >>
 
 # workflow定義
 workflows:
   terraform_web:
     jobs:
-      - terraform_plan
-      - wait_approve:
+      - terraform_plan:
+          name: terraform_plan_dev
+          env: dev
+      - terraform_plan:
+          name: terraform_plan_fut
+          env: fut
+      - approve_dev:
           requires:
-            - terraform_plan
-          type: approval # plan成功したら承認待ち
+            - terraform_plan_dev
+          type: approval # dev適用の承認待ち
+      - approve_fut:
+          requires:
+            - terraform_plan_fut
+          type: approval # fut適用の承認待ち
       - terraform_apply:
+          name: terraform_plan_dev
+          env: dev
           requires:
-            - wait_approve # 承認されたら適用
+            - approve_dev # 承認されたらdevへ適用
+      - terraform_apply:
+          name: terraform_plan_fut
+          env: fut
+          requires:
+            - approve_fut # 承認されたらfutへ適用
 
 # version: 2.1
 # orbs:
