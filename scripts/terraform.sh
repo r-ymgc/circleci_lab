@@ -10,7 +10,7 @@
 
 # tfenvインストール
 git clone https://github.com/tfutils/tfenv.git .tfenv
-PATH=~/.tfenv/bin:$PATH
+export PATH=~/.tfenv/bin:$PATH
 tfenv -v
 tfenv list-remote
 tfenv install 0.11.8
