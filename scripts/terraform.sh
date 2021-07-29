@@ -12,7 +12,7 @@ terraform_cmd=$1
 env=$2
 
 # tfenvインストール
-if [[ -d ./tfenv ]]; then
+if [[ ! -e ./tfenv ]]; then
   git clone https://github.com/tfutils/tfenv.git .tfenv
   export PATH=/home/circleci/project/.tfenv/bin:${PATH}
   tfenv -v
@@ -22,7 +22,7 @@ if [[ -d ./tfenv ]]; then
 fi
 
 # インフラ定義DL
-if [ -d ./terraform ]; then
+if [ ! -e ./terraform ]; then
   git clone git@github.com:r-ymgc/terraform.git terraform
 fi
 
