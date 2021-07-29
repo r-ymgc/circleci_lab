@@ -11,6 +11,7 @@
 terraform_cmd=$1
 env=$2
 
+pwd
 # tfenvインストール
 if [[ ! -e .tfenv ]]; then
   git clone https://github.com/tfutils/tfenv.git .tfenv
