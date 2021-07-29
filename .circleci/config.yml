@@ -34,6 +34,10 @@ jobs:
           name: "Terraform plan << parameters.env >>"
           command: bash -ex ./scripts/terraform.sh plan << parameters.env >>
   terraform_apply:
+    parameters:
+      env:
+        type: enum
+        enum: ["dev", "fut"]
     executor:
       name: default
     steps:
@@ -64,12 +68,12 @@ workflows:
             - terraform_plan_fut
           type: approval # fut適用の承認待ち
       - terraform_apply:
-          name: terraform_plan_dev
+          name: terraform_apply_dev
           env: dev
           requires:
             - approve_dev # 承認されたらdevへ適用
       - terraform_apply:
-          name: terraform_plan_fut
+          name: terraform_apply_fut
           env: fut
           requires:
             - approve_fut # 承認されたらfutへ適用
