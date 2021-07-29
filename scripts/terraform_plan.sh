@@ -4,7 +4,7 @@
 # TerraformでASGを構築
 #
 # @global xxx
-# @parameter $1 xxx
+# @parameter $1 Terraformサブコマンド apply | plan etc...
 # @return 1 エラー
 #==================================================================
 
@@ -20,4 +20,4 @@ git clone git@github.com:r-ymgc/terraform.git ~/terraform
 
 # Terraform実行
 cd ~/terraform
-terraform plan -var-file=./tfvars/${ENV}.tfvars
+terraform $1 -var-file=./tfvars/${ENV}.tfvars
