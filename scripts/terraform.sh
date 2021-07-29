@@ -12,19 +12,22 @@ terraform_cmd=$1
 env=$2
 
 # tfenvインストール
-git clone https://github.com/tfutils/tfenv.git .tfenv
-export PATH=/home/circleci/project/.tfenv/bin:${PATH}
-tfenv -v
-tfenv list-remote
-tfenv install 0.11.8
-tfenv use 0.11.8
+if [[ -d ./tfenv ]]; then
+  git clone https://github.com/tfutils/tfenv.git .tfenv
+  export PATH=/home/circleci/project/.tfenv/bin:${PATH}
+  tfenv -v
+  tfenv list-remote
+  tfenv install 0.11.8
+  tfenv use 0.11.8
+fi
 
 # インフラ定義DL
-git clone git@github.com:r-ymgc/terraform.git terraform
+if [ -d ./terraform ]; then
+  git clone git@github.com:r-ymgc/terraform.git terraform
+fi
 
 # Terraform実行
 cd terraform/web_deploy
-
 if [[ "${terraform_cmd}" == "apply" ]]; then
   terraform plan -var-file=../${env}.tfvars -out=./app.plan
   terraform apply "./app.plan"
