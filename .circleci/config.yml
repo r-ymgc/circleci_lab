@@ -6,4 +6,4 @@ jobs:
     steps:
       - checkout
       - run: echo "Terraform実行"
-      - run: make terraform_plan
+      - run: ./scripts/terraform.sh plan
