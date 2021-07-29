@@ -4,10 +4,13 @@ workflows:
   terraform_web:
     jobs:
       - terraform_plan
-      - terraform_apply:
+      - wait_approve:
           requires:
             - terraform_plan
           type: approval
+      - terraform_apply:
+          requires:
+            - wait_approve
 
 # job定義
 jobs:
