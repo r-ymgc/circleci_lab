@@ -15,7 +15,7 @@ env=$2
 if [[ ! -e .tfenv ]]; then
   git clone https://github.com/tfutils/tfenv.git .tfenv
 fi
-export PATH=/home/circleci/project/.tfenv/bin:${PATH}
+export PATH=/home/circleci/project/workspace/.tfenv/bin:${PATH}
 tfenv -v
 tfenv list-remote
 tfenv install 0.11.8
