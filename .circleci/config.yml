@@ -7,10 +7,10 @@ workflows:
       - wait_approve:
           requires:
             - terraform_plan
-          type: approval
+          type: approval # plan成功したら承認待ち
       - terraform_apply:
           requires:
-            - wait_approve
+            - wait_approve # 承認されたら適用
 
 # job定義
 jobs:
@@ -34,7 +34,7 @@ jobs:
           name: "Terraform init dev"
           command: bash -ex ./scripts/terraform.sh init dev
       - run:
-          name: "Terraform plan dev"
+          name: "Terraform apply dev"
           command: bash -ex ./scripts/terraform.sh apply dev
 
 # version: '2.1'
