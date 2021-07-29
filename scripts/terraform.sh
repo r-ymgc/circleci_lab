@@ -22,4 +22,4 @@ git clone git@github.com:r-ymgc/terraform.git terraform
 
 # Terraform実行
 cd terraform/web_deploy
-terraform $1 -var-file=$2.tfvars
+terraform $1 -var-file=../$2.tfvars
