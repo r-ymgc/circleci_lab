@@ -3,14 +3,15 @@ version: 2.1
 workflows:
   terraform_web:
     jobs:
-      - terraform_init
-      - terraform_plan:
+      - terraform_plan
+      - terraform_apply:
           requires:
-            - terraform_init
+            - terraform_plan
+          type: approval
 
 # job定義
 jobs:
-  terraform_init:
+  terraform_plan:
     docker:
       - image: circleci/node:4.8.2
     steps:
@@ -21,14 +22,17 @@ jobs:
       - run:
           name: "Terraform plan dev"
           command: bash -ex ./scripts/terraform.sh plan dev
-  terraform_plan:
+  terraform_apply:
     docker:
       - image: circleci/node:4.8.2
     steps:
       - checkout
       - run:
+          name: "Terraform init dev"
+          command: bash -ex ./scripts/terraform.sh init dev
+      - run:
           name: "Terraform plan dev"
-          command: bash -ex ./scripts/terraform.sh plan dev
+          command: bash -ex ./scripts/terraform.sh apply dev
 
 # version: '2.1'
 # orbs:
