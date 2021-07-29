@@ -14,12 +14,12 @@ env=$2
 # tfenvインストール
 if [[ ! -e .tfenv ]]; then
   git clone https://github.com/tfutils/tfenv.git .tfenv
-  export PATH=/home/circleci/project/.tfenv/bin:${PATH}
-  tfenv -v
-  tfenv list-remote
-  tfenv install 0.11.8
-  tfenv use 0.11.8
 fi
+export PATH=/home/circleci/project/.tfenv/bin:${PATH}
+tfenv -v
+tfenv list-remote
+tfenv install 0.11.8
+tfenv use 0.11.8
 
 # インフラ定義DL
 if [ ! -e terraform ]; then
