@@ -15,6 +15,7 @@ export PATH=/home/circleci/project/.tfenv/bin:$PATH
 tfenv -v
 tfenv list-remote
 tfenv install 0.11.8
+tfenv use 0.11.8
 
 # インフラ定義DL
 git clone git@github.com:r-ymgc/terraform.git terraform
