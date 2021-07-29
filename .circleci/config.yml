@@ -1,10 +1,62 @@
 version: 2.1
+workflows:
+  terraform_web:
+    jobs:
+      - terraform_init
+      - terraform_plan
+
+# job定義
 jobs:
-  build:
+  terraform_init:
     docker:
       - image: circleci/node:4.8.2
     steps:
       - checkout
-      - run: echo "Terraform実行"
-      - run: bash -ex ./scripts/terraform.sh init dev
-      - run: bash -ex ./scripts/terraform.sh plan dev
+      - run:
+          name: "Terraform init dev"
+          command: bash -ex ./scripts/terraform.sh init dev
+  terraform_plan:
+    docker:
+      - image: circleci/node:4.8.2
+    steps:
+      - checkout
+      - run:
+          name: "Terraform plan dev"
+          command: bash -ex ./scripts/terraform.sh plan dev
+
+# version: '2.1'
+# orbs:
+#   terraform: 'circleci/terraform@2.1.0'
+# workflows:
+#   deploy_infrastructure:
+#     jobs:
+#       - terraform/install:
+#           checkout: true
+#           context: terraform
+#           persist-workspace: true
+#           arch: amd64
+#           os: linux
+#           terraform_version: 0.11.8
+#       - terraform/fmt:
+#           checkout: true
+#           context: terraform
+#       - terraform/validate:
+#           checkout: true
+#           context: terraform
+#           requires:
+#             - terraform/fmt
+#       - terraform/plan:
+#           checkout: true
+#           context: terraform
+#           persist-workspace: true
+#           requires:
+#             - terraform/validate
+#       - terraform/apply:
+#           attach-workspace: true
+#           context: terraform
+#           filters:
+#             branches:
+#               only: master
+#           requires:
+#             - terraform/plan
+#           type: approval
