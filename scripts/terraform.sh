@@ -11,7 +11,6 @@
 terraform_cmd=$1
 env=$2
 
-
 # tfenvインストール
 git clone https://github.com/tfutils/tfenv.git .tfenv
 export PATH=/home/circleci/project/.tfenv/bin:${PATH}
