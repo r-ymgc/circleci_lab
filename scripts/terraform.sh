@@ -9,6 +9,7 @@
 #==================================================================
 
 # tfenvインストール
+pwd
 git clone https://github.com/tfutils/tfenv.git .tfenv
 export PATH=~/.tfenv/bin:$PATH
 tfenv -v
