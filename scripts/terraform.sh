@@ -11,12 +11,11 @@
 terraform_cmd=$1
 env=$2
 
-pwd
 # tfenvインストール
 if [[ ! -e .tfenv ]]; then
   git clone https://github.com/tfutils/tfenv.git .tfenv
 fi
-export PATH=/home/circleci/project/workspace/.tfenv/bin:${PATH}
+export PATH=/home/circleci/workspace/.tfenv/bin:${PATH}
 tfenv -v
 tfenv list-remote
 tfenv install 0.11.8
