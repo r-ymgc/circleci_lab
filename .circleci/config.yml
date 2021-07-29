@@ -48,7 +48,7 @@ workflows:
           requires:
             - wait_approve # 承認されたら適用
 
-# version: '2.1'
+# version: 2.1
 # orbs:
 #   terraform: 'circleci/terraform@2.1.0'
 # workflows:
