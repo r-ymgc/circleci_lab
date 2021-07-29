@@ -9,9 +9,8 @@
 #==================================================================
 
 # tfenvインストール
-pwd
 git clone https://github.com/tfutils/tfenv.git .tfenv
-export PATH=~/.tfenv/bin:$PATH
+export PATH=/home/circleci/project/.tfenv/bin:$PATH
 tfenv -v
 tfenv list-remote
 tfenv install 0.11.8
