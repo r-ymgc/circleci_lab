@@ -7,16 +7,22 @@ executors:
     docker:
       - image: circleci/node:8.11.4
 
+# 共通step定義
+commands:
+  terraform_init:
+    steps:
+      - checkout
+      - run:
+          name: "Terraform init dev"
+          command: bash -ex ./scripts/terraform.sh init dev
+
 # job定義
 jobs:
   terraform_plan:
     executor:
       name: default
     steps:
-      - checkout
-      - run:
-          name: "Terraform init dev"
-          command: bash -ex ./scripts/terraform.sh init dev
+      - terraform_init
       - run:
           name: "Terraform plan dev"
           command: bash -ex ./scripts/terraform.sh plan dev
@@ -24,10 +30,7 @@ jobs:
     executor:
       name: default
     steps:
-      - checkout
-      - run:
-          name: "Terraform init dev"
-          command: bash -ex ./scripts/terraform.sh init dev
+      - terraform_init
       - run:
           name: "Terraform apply dev"
           command: bash -ex ./scripts/terraform.sh apply dev
