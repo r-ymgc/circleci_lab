@@ -1,5 +1,38 @@
-# workflow定義
 version: 2.1
+
+# 実行環境定義
+executors:
+  default:
+    working_directory: ~/workspace
+    docker:
+      - image: circleci/node:8.11.4
+
+# job定義
+jobs:
+  terraform_plan:
+    executor:
+      name: default
+    steps:
+      - checkout
+      - run:
+          name: "Terraform init dev"
+          command: bash -ex ./scripts/terraform.sh init dev
+      - run:
+          name: "Terraform plan dev"
+          command: bash -ex ./scripts/terraform.sh plan dev
+  terraform_apply:
+    executor:
+      name: default
+    steps:
+      - checkout
+      - run:
+          name: "Terraform init dev"
+          command: bash -ex ./scripts/terraform.sh init dev
+      - run:
+          name: "Terraform apply dev"
+          command: bash -ex ./scripts/terraform.sh apply dev
+
+# workflow定義
 workflows:
   terraform_web:
     jobs:
@@ -11,31 +44,6 @@ workflows:
       - terraform_apply:
           requires:
             - wait_approve # 承認されたら適用
-
-# job定義
-jobs:
-  terraform_plan:
-    docker:
-      - image: circleci/node:4.8.2
-    steps:
-      - checkout
-      - run:
-          name: "Terraform init dev"
-          command: bash -ex ./scripts/terraform.sh init dev
-      - run:
-          name: "Terraform plan dev"
-          command: bash -ex ./scripts/terraform.sh plan dev
-  terraform_apply:
-    docker:
-      - image: circleci/node:4.8.2
-    steps:
-      - checkout
-      - run:
-          name: "Terraform init dev"
-          command: bash -ex ./scripts/terraform.sh init dev
-      - run:
-          name: "Terraform apply dev"
-          command: bash -ex ./scripts/terraform.sh apply dev
 
 # version: '2.1'
 # orbs:
