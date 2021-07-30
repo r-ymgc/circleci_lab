@@ -23,20 +23,22 @@ executors:
 # job定義
 jobs:
   terraform_plan:
-    parameters:
-      env:
-        type: enum
-        enum: ["dev", "fut"]
+#     parameters:
+#       env:
+#         type: enum
+#         enum: ["dev", "fut"]
     executor:
       name: default
     steps:
       - checkout
       - run:
-          name: "Terraform init << parameters.env >>"
-          command: bash -ex ./scripts/terraform.sh init << parameters.env >>
+#           name: "Terraform init << parameters.env >>"
+#           command: bash -ex ./scripts/terraform.sh init << parameters.env >>
+          name: "Terraform init $ENV"
+          command: bash -ex ./scripts/terraform.sh init $ENV
       - run:
-          name: "Terraform plan << parameters.env >>"
-          command: bash -ex ./scripts/terraform.sh plan << parameters.env >>
+          name: "Terraform plan $ENV"
+          command: bash -ex ./scripts/terraform.sh plan $ENV
   terraform_apply:
     parameters:
       env:
@@ -59,10 +61,12 @@ workflows:
     jobs:
       - terraform_plan:
           name: terraform_plan_dev
-          env: dev
+#           env: dev
+          context: dev
       - terraform_plan:
           name: terraform_plan_fut
-          env: fut
+#           env: fut
+          context: fut
       - approve_dev:
           requires:
             - terraform_plan_dev
