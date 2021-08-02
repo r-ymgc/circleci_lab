@@ -80,11 +80,11 @@ workflows:
           env: dev
           requires:
             - approve_dev # 承認されたらdevへ適用
-      - terraform_apply:
-          name: terraform_apply_fut
-          env: fut
-          requires:
-            - approve_fut # 承認されたらfutへ適用
+#       - terraform_apply:
+#           name: terraform_apply_fut
+#           env: fut
+#           requires:
+#             - approve_fut # 承認されたらfutへ適用
 
 # version: 2.1
 # orbs:
