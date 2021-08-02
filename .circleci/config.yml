@@ -1,9 +1,5 @@
 version: 2.1
 
-# orbs:
-#   aws-code-deploy: circleci/aws-code-deploy@1.0.1
-#   aws-cli: circleci/aws-cli@0.1
-
 # 実行環境定義
 executors:
   default:
@@ -11,114 +7,21 @@ executors:
     docker:
       - image: circleci/node:8.11.4
 
-# # 共通step定義
-# commands:
-#   terraform_init:
-#     steps:
-#       - checkout
-#       - run:
-#           name: "Terraform init dev"
-#           command: bash -ex ./scripts/terraform.sh init dev
-
-# job定義
+# ジョブ定義
 jobs:
-  terraform_plan:
-#     parameters:
-#       env:
-#         type: enum
-#         enum: ["dev", "fut"]
+  Job1:
     executor:
       name: default
     steps:
       - checkout
       - run:
-#           name: "Terraform init << parameters.env >>"
-#           command: bash -ex ./scripts/terraform.sh init << parameters.env >>
-          name: "Terraform init $ENV"
-          command: bash -ex ./scripts/terraform.sh init $ENV
-      - run:
-          name: "Terraform plan $ENV"
-          command: bash -ex ./scripts/terraform.sh plan $ENV
-  terraform_apply:
-    parameters:
-      env:
-        type: enum
-        enum: ["dev", "fut"]
-    executor:
-      name: default
-    steps:
-      - checkout
-      - run:
-          name: "Terraform init << parameters.env >>"
-          command: bash -ex ./scripts/terraform.sh init << parameters.env >>
-      - run:
-          name: "Terraform apply << parameters.env >>"
-          command: bash -ex ./scripts/terraform.sh apply << parameters.env >>
+          name: "Test job1"
+          command: echo "Runnning CircleCI job. ENV=$ENV"
 
-# workflow定義
+# ワークフロー定義
 workflows:
-  terraform_web:
+  workflow1:
     jobs:
-      - terraform_plan:
-          name: terraform_plan_dev
-#           env: dev
-          context: dev
-      - terraform_plan:
-          name: terraform_plan_fut
-#           env: fut
-          context: fut
-      - approve_dev:
-          requires:
-            - terraform_plan_dev
-          type: approval # dev適用の承認待ち
-      - approve_fut:
-          requires:
-            - terraform_plan_fut
-          type: approval # fut適用の承認待ち
-      - terraform_apply:
-          name: terraform_apply_dev
-          env: dev
-          requires:
-            - approve_dev # 承認されたらdevへ適用
-      - terraform_apply:
-          name: terraform_apply_fut
-          env: fut
-          requires:
-            - approve_fut # 承認されたらfutへ適用
-
-# version: 2.1
-# orbs:
-#   terraform: 'circleci/terraform@2.1.0'
-# workflows:
-#   deploy_infrastructure:
-#     jobs:
-#       - terraform/install:
-#           checkout: true
-#           context: terraform
-#           persist-workspace: true
-#           arch: amd64
-#           os: linux
-#           terraform_version: 0.11.8
-#       - terraform/fmt:
-#           checkout: true
-#           context: terraform
-#       - terraform/validate:
-#           checkout: true
-#           context: terraform
-#           requires:
-#             - terraform/fmt
-#       - terraform/plan:
-#           checkout: true
-#           context: terraform
-#           persist-workspace: true
-#           requires:
-#             - terraform/validate
-#       - terraform/apply:
-#           attach-workspace: true
-#           context: terraform
-#           filters:
-#             branches:
-#               only: master
-#           requires:
-#             - terraform/plan
-#           type: approval
+      - Job1:
+          name: "job1 in dev"
+          context: evass_dev
